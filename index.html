@@ -6,9 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -30,7 +28,7 @@
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.2);
       backdrop-filter: blur(10px);
       padding: 40px 30px;
       border-radius: 25px;
@@ -42,26 +40,14 @@
     }
 
     @keyframes floatCard {
-      0%, 100% { transform: translateY(0); }
+      0%,100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
     }
 
-    h1 {
-      color: white;
-      font-size: 2.2rem;
-      margin-bottom: 10px;
-    }
+    h1 { color: white; font-size: 2.2rem; margin-bottom: 10px; }
+    p { color: white; font-size: 1.2rem; }
 
-    p {
-      color: white;
-      font-size: 1.2rem;
-    }
-
-    .buttons {
-      margin-top: 35px;
-      height: 120px;
-      position: relative;
-    }
+    .buttons { margin-top: 35px; height: 120px; position: relative; }
 
     button {
       padding: 12px 30px;
@@ -73,21 +59,10 @@
       transition: transform 0.2s ease;
     }
 
-    #yes {
-      background: white;
-      color: #ff4d6d;
-      left: 30px;
-    }
+    #yes { background: white; color: #ff4d6d; left: 30px; }
+    #yes:hover { transform: scale(1.1); }
 
-    #yes:hover {
-      transform: scale(1.1);
-    }
-
-    #no {
-      background: #ffd6dd;
-      color: #b5172f;
-      right: 30px;
-    }
+    #no { background: #ffd6dd; color: #b5172f; right: 30px; }
 
     .kiss {
       position: absolute;
@@ -97,83 +72,81 @@
     }
 
     @keyframes fall {
-      0% {
-        transform: translateY(-10vh) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="card">
-    <h1>Hey ❤️</h1>
-    <p>Will you be my Valentine? 💕</p>
+<div class="card">
+  <h1>Hey ❤️</h1>
+  <p>Will you be my Valentine? 💕</p>
 
-    <div class="buttons">
-      <button id="yes">Yes 💖</button>
-      <button id="no">No 🙈</button>
-    </div>
+  <div class="buttons">
+    <button id="yes">Yes 💖</button>
+    <button id="no">No 🙈</button>
   </div>
+</div>
 
-  <script>
-    const noBtn = document.getElementById("no");
-    const yesBtn = document.getElementById("yes");
-    const card = document.querySelector(".card");
+<script>
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const card = document.querySelector(".card");
 
-    function moveNo() {
-      const cardRect = card.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
+  // Move No button
+  function moveNo() {
+    const cardRect = card.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const maxX = cardRect.width - btnRect.width;
+    const maxY = cardRect.height - btnRect.height;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  }
 
-      const maxX = cardRect.width - btnRect.width;
-      const maxY = cardRect.height - btnRect.height;
+  noBtn.addEventListener("mouseenter", moveNo);
+  noBtn.addEventListener("touchstart", moveNo);
 
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+  // Yes button click
+  yesBtn.addEventListener("click", () => {
 
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
+    // Open Gmail (or default mail client) with pre-filled email
+    window.location.href = "mailto:Abhash.india@gmail.com?subject=Valentine Response&body=Divya said YES 💖";
+
+    // Replace page with kiss animation
+    document.body.innerHTML = `
+      <div style="
+        height:100vh;
+        width:100vw;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        flex-direction:column;
+        background:linear-gradient(135deg,#ff758c,#ff7eb3);
+        background-size:400% 400%;
+        animation:gradientMove 10s ease infinite;
+        color:white;
+        font-family:'Segoe UI',sans-serif;
+        text-align:center;
+      ">
+        <h1 style="font-size:2.5rem;">You said YES 😍💖</h1>
+        <p style="font-size:1.5rem;">Sending you kisses…</p>
+      </div>
+    `;
+
+    // Create floating kisses
+    for (let i = 0; i < 25; i++) {
+      const kiss = document.createElement("div");
+      kiss.className = "kiss";
+      kiss.textContent = "💋";
+      kiss.style.left = Math.random() * 100 + "vw";
+      kiss.style.animationDuration = (Math.random() * 2 + 3) + "s";
+      document.body.appendChild(kiss);
     }
-
-    noBtn.addEventListener("mouseenter", moveNo);
-    noBtn.addEventListener("touchstart", moveNo);
-
-    yesBtn.addEventListener("click", () => {
-      document.body.innerHTML = `
-        <div style="
-          height:100vh;
-          width:100vw;
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          flex-direction:column;
-          background:linear-gradient(135deg,#ff758c,#ff7eb3);
-          background-size:400% 400%;
-          animation:gradientMove 10s ease infinite;
-          color:white;
-          font-family:'Segoe UI',sans-serif;
-          text-align:center;
-        ">
-          <h1 style="font-size:2.5rem;">You said YES 😍💖</h1>
-          <p style="font-size:1.5rem;">Sending you kisses…</p>
-        </div>
-      `;
-
-      for (let i = 0; i < 25; i++) {
-        const kiss = document.createElement("div");
-        kiss.className = "kiss";
-        kiss.textContent = "💋";
-        kiss.style.left = Math.random() * 100 + "vw";
-        kiss.style.animationDuration = (Math.random() * 2 + 3) + "s";
-        document.body.appendChild(kiss);
-      }
-    });
-  </script>
+  });
+</script>
 
 </body>
 </html>
