@@ -7,7 +7,6 @@
 
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       height: 100vh;
@@ -20,13 +19,11 @@
       font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
     }
-
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
     .card {
       background: rgba(255,255,255,0.2);
       backdrop-filter: blur(10px);
@@ -38,17 +35,13 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.25);
       animation: floatCard 3s ease-in-out infinite;
     }
-
     @keyframes floatCard {
       0%,100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
     }
-
     h1 { color: white; font-size: 2.2rem; margin-bottom: 10px; }
     p { color: white; font-size: 1.2rem; }
-
     .buttons { margin-top: 35px; height: 120px; position: relative; }
-
     button {
       padding: 12px 30px;
       font-size: 1rem;
@@ -58,19 +51,15 @@
       position: absolute;
       transition: transform 0.2s ease;
     }
-
     #yes { background: white; color: #ff4d6d; left: 30px; }
     #yes:hover { transform: scale(1.1); }
-
     #no { background: #ffd6dd; color: #b5172f; right: 30px; }
-
     .kiss {
       position: absolute;
       font-size: 2rem;
       animation: fall linear forwards;
       opacity: 0.85;
     }
-
     @keyframes fall {
       0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
@@ -89,12 +78,20 @@
   </div>
 </div>
 
+<!-- EmailJS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("K5dJZBNonnUsu8YlO"); // Replace with your EmailJS public key
+  })();
+</script>
+
 <script>
   const noBtn = document.getElementById("no");
   const yesBtn = document.getElementById("yes");
   const card = document.querySelector(".card");
 
-  // Move No button
+  // Move No button when hovered
   function moveNo() {
     const cardRect = card.getBoundingClientRect();
     const btnRect = noBtn.getBoundingClientRect();
@@ -105,17 +102,24 @@
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
   }
-
   noBtn.addEventListener("mouseenter", moveNo);
   noBtn.addEventListener("touchstart", moveNo);
 
-  // Yes button click
+  // Yes button click — sends email automatically with hardcoded name
   yesBtn.addEventListener("click", () => {
 
-    // Open Gmail (or default mail client) with pre-filled email
-    window.location.href = "mailto:Abhash.india@gmail.com?subject=Valentine Response&body=Puja said YES 💖";
+    // Hardcoded name
+    const name = "Puja";
 
-    // Replace page with kiss animation
+    // Send email via EmailJS
+    emailjs.send("service_8bqr08l", "template_sofr8ok", {
+      user_name: name,
+      answer: "Yes 💖"
+    }).then(() => {
+      console.log("Email sent successfully!");
+    }).catch(err => console.error("Email sending failed:", err));
+
+    // Show kiss animation
     document.body.innerHTML = `
       <div style="
         height:100vh;
@@ -136,7 +140,6 @@
       </div>
     `;
 
-    // Create floating kisses
     for (let i = 0; i < 25; i++) {
       const kiss = document.createElement("div");
       kiss.className = "kiss";
