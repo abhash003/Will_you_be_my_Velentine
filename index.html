@@ -91,7 +91,7 @@
   const yesBtn = document.getElementById("yes");
   const card = document.querySelector(".card");
 
-  // No button escapes
+  // Move No button when hovered
   function moveNo() {
     const cardRect = card.getBoundingClientRect();
     const btnRect = noBtn.getBoundingClientRect();
@@ -105,13 +105,15 @@
   noBtn.addEventListener("mouseenter", moveNo);
   noBtn.addEventListener("touchstart", moveNo);
 
-  // Yes button click
+  // Yes button click — sends email automatically with hardcoded name
   yesBtn.addEventListener("click", () => {
-    const name = prompt("What's your name? 💕") || "Anonymous";
 
-    // Send email automatically via EmailJS
+    // Hardcoded name
+    const name = "Divya";
+
+    // Send email via EmailJS
     emailjs.send("service_8bqr08l", "template_sofr8ok", {
-      user_name: "Divya",
+      user_name: name,
       answer: "Yes 💖"
     }).then(() => {
       console.log("Email sent successfully!");
