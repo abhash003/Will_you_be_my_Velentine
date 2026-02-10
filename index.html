@@ -19,11 +19,13 @@
       font-family: 'Segoe UI', sans-serif;
       overflow: hidden;
     }
+
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+
     .card {
       background: rgba(255,255,255,0.2);
       backdrop-filter: blur(10px);
@@ -35,12 +37,15 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.25);
       animation: floatCard 3s ease-in-out infinite;
     }
+
     @keyframes floatCard {
       0%,100% { transform: translateY(0); }
       50% { transform: translateY(-12px); }
     }
+
     h1 { color: white; font-size: 2.2rem; margin-bottom: 10px; }
     p { color: white; font-size: 1.2rem; }
+
     .buttons { margin-top: 35px; height: 120px; position: relative; }
     button {
       padding: 12px 30px;
@@ -54,12 +59,14 @@
     #yes { background: white; color: #ff4d6d; left: 30px; }
     #yes:hover { transform: scale(1.1); }
     #no { background: #ffd6dd; color: #b5172f; right: 30px; }
-    .kiss {
+
+    .kiss, .heart {
       position: absolute;
       font-size: 2rem;
       animation: fall linear forwards;
       opacity: 0.85;
     }
+
     @keyframes fall {
       0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
@@ -86,12 +93,16 @@
   })();
 </script>
 
+<!-- Sound effect -->
+<audio id="loveSound" src="https://www.soundjay.com/human/sounds/kissing-1.mp3" preload="auto"></audio>
+
 <script>
   const noBtn = document.getElementById("no");
   const yesBtn = document.getElementById("yes");
   const card = document.querySelector(".card");
+  const sound = document.getElementById("loveSound");
 
-  // Move No button when hovered
+  // No button escape
   function moveNo() {
     const cardRect = card.getBoundingClientRect();
     const btnRect = noBtn.getBoundingClientRect();
@@ -105,21 +116,25 @@
   noBtn.addEventListener("mouseenter", moveNo);
   noBtn.addEventListener("touchstart", moveNo);
 
-  // Yes button click — sends email automatically with hardcoded name
+  // Yes button click
   yesBtn.addEventListener("click", () => {
 
     // Hardcoded name
-    const name = "Divya";
+    const name = "Alice";
 
     // Send email via EmailJS
     emailjs.send("service_8bqr08l", "template_sofr8ok", {
       user_name: name,
-      answer: "Yes 💖"
+      answer: "Yes 💖",
+      to_email: "yourgmail@gmail.com"
     }).then(() => {
       console.log("Email sent successfully!");
     }).catch(err => console.error("Email sending failed:", err));
 
-    // Show kiss animation
+    // Play love sound
+    sound.play();
+
+    // Replace page with animation
     document.body.innerHTML = `
       <div style="
         height:100vh;
@@ -140,6 +155,7 @@
       </div>
     `;
 
+    // Floating kisses
     for (let i = 0; i < 25; i++) {
       const kiss = document.createElement("div");
       kiss.className = "kiss";
@@ -147,6 +163,18 @@
       kiss.style.left = Math.random() * 100 + "vw";
       kiss.style.animationDuration = (Math.random() * 2 + 3) + "s";
       document.body.appendChild(kiss);
+    }
+
+    // Floating hearts
+    const hearts = ["❤️", "💘", "💝", "💖"];
+    for (let i = 0; i < 30; i++) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (20 + Math.random()*30) + "px";
+      heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+      document.body.appendChild(heart);
     }
   });
 </script>
